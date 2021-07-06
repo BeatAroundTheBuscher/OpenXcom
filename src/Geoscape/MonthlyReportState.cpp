@@ -465,10 +465,36 @@ void MonthlyReportState::calculateChanges()
 		// process
 		if ((*k)->getNewPact())
 		{
+			//Complete infiltration removes nation support research (same name as Country, f. ex. STR_AUSTRALIA)
+			std::string infiltratedCountryName = (*k)->getRules()->getType();
+
+			const Mod *mod = _game->getMod();
+			SavedGame *saveGame = _game->getSavedGame();
+			for (auto& pair : mod->getResearchMap())
+			{
+				if (pair.first == infiltratedCountryName)
+				{
+					saveGame->removeDiscoveredResearch(pair.second); //	void removeDiscoveredResearch(const RuleResearch *research);
+				}
+			}
+
 			_pactList.push_back((*k)->getRules()->getType());
 		}
 		if ((*k)->getCancelPact() && (*k)->getPact())
 		{
+			////Removed infiltration adds nation support research back(same name as Country, f. ex. STR_AUSTRALIA)
+			std::string infiltratedCountryName = (*k)->getRules()->getType();
+
+			const Mod *mod = _game->getMod();
+			SavedGame *saveGame = _game->getSavedGame();
+			for (auto& pair : mod->getResearchMap())
+			{
+				if (pair.first == infiltratedCountryName)
+				{
+					saveGame->addFinishedResearchSimple(pair.second); //	void removeDiscoveredResearch(const RuleResearch *research);
+				}
+			}
+			
 			_cancelPactList.push_back((*k)->getRules()->getType());
 		}
 		// determine satisfaction level, sign pacts, adjust funding
