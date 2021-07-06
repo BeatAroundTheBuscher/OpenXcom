@@ -157,6 +157,7 @@ GeoscapeState::GeoscapeState() : _pause(false), _zoomInEffectDone(false), _zoomO
 	_btnUfopaedia = new TextButton(63, 11, screenWidth-63, screenHeight/2-64);
 	_btnOptions = new TextButton(63, 11, screenWidth-63, screenHeight/2-52);
 	_btnFunding = new TextButton(63, 11, screenWidth-63, screenHeight/2-40);
+	_btnBuscher = new TextButton(63, 11, 0, 0);	
 
 	_btn5Secs = new TextButton(31, 13, screenWidth-63, screenHeight/2+12);
 	_btn1Min = new TextButton(31, 13, screenWidth-31, screenHeight/2+12);
@@ -216,6 +217,7 @@ GeoscapeState::GeoscapeState() : _pause(false), _zoomInEffectDone(false), _zoomO
 	add(_btnUfopaedia, "button", "geoscape");
 	add(_btnOptions, "button", "geoscape");
 	add(_btnFunding, "button", "geoscape");
+	add(_btnBuscher, "button", "geoscape");
 
 	add(_btn5Secs, "button", "geoscape");
 	add(_btn1Min, "button", "geoscape");
@@ -300,6 +302,12 @@ GeoscapeState::GeoscapeState() : _pause(false), _zoomInEffectDone(false), _zoomO
 	_btnFunding->onMouseClick((ActionHandler)&GeoscapeState::btnFundingClick);
 	_btnFunding->onKeyboardPress((ActionHandler)&GeoscapeState::btnFundingClick, Options::keyGeoFunding);
 	_btnFunding->setGeoscapeButton(true);
+
+	_btnBuscher->initText(_game->getMod()->getFont("FONT_GEO_BIG"), _game->getMod()->getFont("FONT_GEO_SMALL"), _game->getLanguage());
+	_btnBuscher->setText(Options::oxceLinks ? tr("STR_EXTENDED_UC") : tr("STR_FUNDING_UC"));
+	_btnBuscher->onMouseClick((ActionHandler)&GeoscapeState::btnBuscherClick);
+	_btnBuscher->onKeyboardPress((ActionHandler)&GeoscapeState::btnBuscherClick, Options::keyGeoFunding);
+	_btnBuscher->setGeoscapeButton(true);
 
 	_btn5Secs->initText(_game->getMod()->getFont("FONT_GEO_BIG"), _game->getMod()->getFont("FONT_GEO_SMALL"), _game->getLanguage());
 	_btn5Secs->setBig();
@@ -1550,6 +1558,10 @@ void GeoscapeState::time10Minutes()
 
 	// Handle UFO re-targeting (i.e. hunting and escorting) logic
 	ufoHuntingAndEscorting();
+
+	//BUSCHER
+	_globe->paintTheWorld();
+
 }
 
 void GeoscapeState::ufoHuntingAndEscorting()
@@ -4173,4 +4185,37 @@ void GeoscapeState::cbxZoneChange(Action *)
 	_game->getSavedGame()->debugZone = _cbxZone->getSelected();
 }
 
+/**
+ * Goes to the Funding screen.
+ * @param action Pointer to an action.
+ */
+void GeoscapeState::btnBuscherClick(Action *)
+{
+	/*
+	if (buttonsDisabled())
+	{
+		return;
+	}
+	if (Options::oxceLinks)
+	{
+		_game->pushState(new ExtendedGeoscapeLinksState(this));
+	}
+	else
+	{
+		_game->pushState(new FundingState);
+	}
+	*/
+
+	int i = 0;
+
+	i = _globe->getGlobeShowMode();
+	i++;
+	i = i % 2;
+
+	_globe->setGlobeShowMode(i);
+	//_game->pushState(new FundingState);
 }
+
+}
+
+

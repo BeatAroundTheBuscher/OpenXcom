@@ -33,7 +33,7 @@ class Polygon
 private:
 	double *_lat, *_lon;
 	Sint16 *_x, *_y;
-	int _points, _texture;
+	int _points, _texture, _buscherTexture;
 public:
 	/// Creates a polygon with a number of points.
 	Polygon(int points);
@@ -63,6 +63,10 @@ public:
 	int getTexture() const;
 	/// Sets the texture of the polygon.
 	void setTexture(int tex);
+	/// Gets the texture of the polygon.
+	int getBuscherTexture() const;
+	/// Sets the texture of the polygon.
+	void setBuscherTexture(int tex);
 	/// Gets the number of points of the polygon.
 	int getPoints() const;
 };

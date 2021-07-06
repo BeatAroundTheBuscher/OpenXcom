@@ -46,7 +46,7 @@ class GeoscapeState : public State
 private:
 	Surface *_bg, *_sideLine, *_sidebar;
 	Globe *_globe;
-	TextButton *_btnIntercept, *_btnBases, *_btnGraphs, *_btnUfopaedia, *_btnOptions, *_btnFunding;
+	TextButton *_btnIntercept, *_btnBases, *_btnGraphs, *_btnUfopaedia, *_btnOptions, *_btnFunding, *_btnBuscher;
 	TextButton *_timeSpeed;
 	TextButton *_btn5Secs, *_btn1Min, *_btn5Mins, *_btn30Mins, *_btn1Hour, *_btn1Day;
 	TextButton *_sideTop, *_sideBottom;
@@ -130,6 +130,8 @@ public:
 	void btnOptionsClick(Action *action);
 	/// Handler for clicking the Funding button.
 	void btnFundingClick(Action *action);
+	/// Handler for pressing the Rotate Left arrow.
+	void btnBuscherClick(Action *action);
 	/// Handler for pressing the Rotate Left arrow.
 	void btnRotateLeftPress(Action *action);
 	/// Handler for releasing the Rotate Left arrow.

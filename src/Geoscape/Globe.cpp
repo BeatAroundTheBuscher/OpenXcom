@@ -348,6 +348,9 @@ Globe::Globe(Game* game, int cenX, int cenY, int width, int height, int x, int y
 	_zoom = _game->getSavedGame()->getGlobeZoom();
 	_zoomOld = _zoom;
 
+	_buscherVal = 0;
+	_globeShowMode = 0;
+
 	setupRadii(width, height);
 	setZoom(_zoom);
 
@@ -989,8 +992,19 @@ void Globe::drawLand()
 			y[j] = (*i)->getY(j);
 		}
 
+		//drawTexturedPolygon(x, y, (*i)->getPoints(), _texture->getFrame((*i)->getBuscherTexture() + _zoomTexture), 0, 0);
+
 		// Apply textures according to zoom and shade
-		drawTexturedPolygon(x, y, (*i)->getPoints(), _texture->getFrame((*i)->getTexture() + _zoomTexture), 0, 0);
+
+		if (_globeShowMode)
+		{
+			//drawTexturedPolygon(x, y, (*i)->getPoints(), _texture->getFrame(_buscherVal), 0, 0);
+			drawTexturedPolygon(x, y, (*i)->getPoints(), _texture->getFrame((*i)->getBuscherTexture() + _zoomTexture), 0, 0);
+		}		
+		else
+		{
+			drawTexturedPolygon(x, y, (*i)->getPoints(), _texture->getFrame((*i)->getTexture() + _zoomTexture), 0, 0);			
+		}
 	}
 }
 
@@ -2108,6 +2122,67 @@ void Globe::setCraftRange(double lon, double lat, double range)
 	_craftLon = lon;
 	_craftLat = lat;
 	_craftRange = range;
+}
+
+void Globe::setGlobeShowMode(int mode)
+{
+	_globeShowMode = mode;
+}
+
+int Globe::getGlobeShowMode() const
+{
+	return _globeShowMode;
+}
+
+void Globe::paintTheWorld()
+{
+	_buscherVal++;
+	_buscherVal = _buscherVal % std::distance(_cacheLand.begin(), _cacheLand.end());
+
+	Sint16 x[4], y[4];
+
+	for (std::list<Polygon*>::iterator i = _cacheLand.begin(); i != _cacheLand.end(); ++i)
+	{
+		/*
+		// Convert coordinates
+		for (int j = 0; j < (*i)->getPoints(); ++j)
+		{
+			x[j] = (*i)->getX(j);
+			y[j] = (*i)->getY(j);
+		}
+		*/
+		int myDistance = std::distance(_cacheLand.begin(), i);
+		if (myDistance == _buscherVal)
+		{
+			(*i)->setBuscherTexture(7);
+		}
+	}
+
+
+/*
+		;
+		_buscherVal = _buscherVal % 38;
+		_buscherVal = 5;
+
+		int myDistance = 0; // i to end are 392 items
+		//myDistance = std::distance(_cacheLand.begin(), i);
+		myDistance = std::distance(i, _cacheLand.end());
+		myDistance = myDistance % 10; // (keep _zoomTexture = 0/13/26) in mind
+
+		//shouldn't be done here obviously
+		(*i)->setBuscherTexture(myDistance);
+*/
+/*
+		int myDistance = std::distance(_cacheLand.begin(), i);
+		if (myDistance == 0)
+		{
+			(*i)->setBuscherTexture(7);
+		}
+		else if (myDistance % 2)
+		{
+			(*i)->setBuscherTexture(7);
+		}
+*/
 }
 
 }

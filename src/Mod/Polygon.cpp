@@ -26,7 +26,7 @@ namespace OpenXcom
  * Initializes the polygon with arrays to store each point's coordinates.
  * @param points Number of points.
  */
-Polygon::Polygon(int points) : _points(points), _texture(0)
+Polygon::Polygon(int points) : _points(points), _texture(0), _buscherTexture(0)
 {
 	_lat = new double[_points];
 	_lon = new double[_points];
@@ -60,6 +60,7 @@ Polygon::Polygon(const Polygon& other)
 		_y[i] = other._y[i];
 	}
 	_texture = other._texture;
+	_buscherTexture = other._buscherTexture;
 }
 
 /**
@@ -199,6 +200,20 @@ int Polygon::getTexture() const
 void Polygon::setTexture(int tex)
 {
 	_texture = tex;
+}
+
+int Polygon::getBuscherTexture() const
+{
+	return _buscherTexture;
+}
+
+/**
+ * Changes the texture used to draw the polygon.
+ * @param tex Texture sprite number.
+ */
+void Polygon::setBuscherTexture(int tex)
+{
+	_buscherTexture = tex;
 }
 
 /**

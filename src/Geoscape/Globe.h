@@ -78,6 +78,8 @@ private:
 	Uint32 _mouseScrollingStartTime;
 	int _totalMouseMoveX, _totalMouseMoveY;
 	bool _mouseMovedOverThreshold;
+	int _buscherVal;
+	int _globeShowMode;
 
 	/// Sets the globe zoom factor.
 	void setZoom(size_t zoom);
@@ -213,6 +215,12 @@ public:
 	void resize();
 	/// Move the mouse back to where it started after we finish drag scrolling.
 	void stopScrolling(Action *action);
+	/// Gets the texture of the polygon.
+	int getGlobeShowMode() const;
+	/// Sets the texture of the polygon.
+	void setGlobeShowMode(int mode);
+	/// BUSCHER
+	void paintTheWorld();
 };
 
 }
