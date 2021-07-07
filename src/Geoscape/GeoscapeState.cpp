@@ -129,6 +129,7 @@
 #include "../fmath.h"
 #include "../fallthrough.h"
 
+#include "../Mod/Polygon.h"
 #include "../Savegame/OverlayPolygon.h"
 
 namespace OpenXcom
@@ -1562,7 +1563,7 @@ void GeoscapeState::time10Minutes()
 	ufoHuntingAndEscorting();
 
 	//BUSCHER
-	_globe->paintTheWorld();
+	//paintTheWorld(_globe);
 
 }
 
@@ -4218,9 +4219,82 @@ void GeoscapeState::btnBuscherClick(Action *)
 	i = i % 2;
 
 	overlayPolygon.setGlobeShowMode(i);
+/*
+	if (i)
+	{
+		paintTheWorld(_globe);
+	}
+*/
 	//_game->pushState(new FundingState);
 
 	//		if (!_game->getSavedGame()->isIronman())
+}
+
+void GeoscapeState::paintTheWorld(Globe* globe)
+{
+
+
+	std::list<Polygon*> cachedPolygons = globe->getCachedPolygons();
+	//_buscherVal++;
+	//_buscherVal = _buscherVal % std::distance(_cacheLand.begin(), _cacheLand.end());
+
+	//Sint16 x[4], y[4];
+
+	OverlayPolygon &overlayPolygon = (_game->getSavedGame()->getOverlayPolygon());
+
+	unsigned int j = 0;
+	for (std::list<Polygon*>::iterator i = cachedPolygons.begin(); i != cachedPolygons.end(); ++i)
+	{
+		j = std::distance(cachedPolygons.begin(), i);
+		(*i)->setBuscherTexture(overlayPolygon.getLayer1Value(j));
+	}
+
+/*
+	for (std::list<int*>::iterator i = overlayPolygon.begin(); i != overlayPolygon.end(); ++i)
+	{
+
+		// Convert coordinates
+		for (int j = 0; j < (*i)->getPoints(); ++j)
+		{
+			x[j] = (*i)->getX(j);
+			y[j] = (*i)->getY(j);
+		}
+
+		//int myDistance = std::distance(overlayPolygon.begin(), i);
+
+		if (myDistance == _buscherVal)
+		{
+			(*i)->setBuscherTexture(7);
+		}
+
+		(*i)->setBuscherTexture(7);
+	}
+
+*/
+/*
+		;
+		_buscherVal = _buscherVal % 38;
+		_buscherVal = 5;
+
+		int myDistance = 0; // i to end are 392 items
+		//myDistance = std::distance(_cacheLand.begin(), i);
+		myDistance = std::distance(i, _cacheLand.end());
+		myDistance = myDistance % 10; // (keep _zoomTexture = 0/13/26) in mind
+
+		//shouldn't be done here obviously
+		(*i)->setBuscherTexture(myDistance);
+*/
+/*
+		int myDistance = std::distance(_cacheLand.begin(), i);
+		if (myDistance == 0)
+		{
+			(*i)->setBuscherTexture(7);
+		}
+		else if (myDistance % 2)
+		{
+			(*i)->setBuscherTexture(7);
+		}
+*/
 }
 
 }

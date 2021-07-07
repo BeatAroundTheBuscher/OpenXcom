@@ -860,6 +860,8 @@ void Globe::cache(std::list<Polygon*> *polygons, std::list<Polygon*> *cache)
 	}
 	cache->clear();
 
+	OverlayPolygon &overlayPolygon = (_game->getSavedGame()->getOverlayPolygon());
+
 	// Pre-calculate values to cache
 	for (std::list<Polygon*>::iterator i = polygons->begin(); i != polygons->end(); ++i)
 	{
@@ -888,6 +890,11 @@ void Globe::cache(std::list<Polygon*> *polygons, std::list<Polygon*> *cache)
 			p->setX(j, x);
 			p->setY(j, y);
 		}
+
+		// BUSCHER
+		unsigned int j = std::distance(polygons->begin(), i);
+		(*i)->setBuscherTexture(overlayPolygon.getLayer1Value(j));
+
 
 		cache->push_back(p);
 	}
@@ -954,10 +961,21 @@ void Globe::draw()
 	}
 	Surface::draw();
 	drawOcean();
-	drawLand();
 	drawRadars();
 	drawFlights();
-	drawShadow();
+
+	OverlayPolygon _overlayPolygon = _game->getSavedGame()->getOverlayPolygon();
+	if (_overlayPolygon.getGlobeShowMode())
+	{
+		drawLand(); // ToDo extra function
+	}
+	else
+	{
+		drawLand();
+		drawShadow();
+	}
+
+	
 	drawMarkers();
 	drawDetail();
 }
@@ -1002,7 +1020,10 @@ void Globe::drawLand()
 		if (_overlayPolygon.getGlobeShowMode())
 		{
 			//drawTexturedPolygon(x, y, (*i)->getPoints(), _texture->getFrame(_buscherVal), 0, 0);
-			drawTexturedPolygon(x, y, (*i)->getPoints(), _texture->getFrame((*i)->getBuscherTexture() + _zoomTexture), 0, 0);
+			//drawTexturedPolygon(x, y, (*i)->getPoints(), _texture->getFrame((*i)->getBuscherTexture() + _zoomTexture), 0, 0);
+
+			//	void drawPolygon(Sint16 *x, Sint16 *y, int n, Uint8 color);
+			drawPolygon(x, y, (*i)->getPoints(), 128); // Geoscape palette
 		}		
 		else
 		{
@@ -2127,56 +2148,9 @@ void Globe::setCraftRange(double lon, double lat, double range)
 	_craftRange = range;
 }
 
-
-void Globe::paintTheWorld()
+std::list<Polygon*> Globe::getCachedPolygons()
 {
-	_buscherVal++;
-	_buscherVal = _buscherVal % std::distance(_cacheLand.begin(), _cacheLand.end());
-
-	Sint16 x[4], y[4];
-
-	for (std::list<Polygon*>::iterator i = _cacheLand.begin(); i != _cacheLand.end(); ++i)
-	{
-		/*
-		// Convert coordinates
-		for (int j = 0; j < (*i)->getPoints(); ++j)
-		{
-			x[j] = (*i)->getX(j);
-			y[j] = (*i)->getY(j);
-		}
-		*/
-		int myDistance = std::distance(_cacheLand.begin(), i);
-		if (myDistance == _buscherVal)
-		{
-			(*i)->setBuscherTexture(7);
-		}
-	}
-
-
-/*
-		;
-		_buscherVal = _buscherVal % 38;
-		_buscherVal = 5;
-
-		int myDistance = 0; // i to end are 392 items
-		//myDistance = std::distance(_cacheLand.begin(), i);
-		myDistance = std::distance(i, _cacheLand.end());
-		myDistance = myDistance % 10; // (keep _zoomTexture = 0/13/26) in mind
-
-		//shouldn't be done here obviously
-		(*i)->setBuscherTexture(myDistance);
-*/
-/*
-		int myDistance = std::distance(_cacheLand.begin(), i);
-		if (myDistance == 0)
-		{
-			(*i)->setBuscherTexture(7);
-		}
-		else if (myDistance % 2)
-		{
-			(*i)->setBuscherTexture(7);
-		}
-*/
+	return _cacheLand;
 }
 
 }

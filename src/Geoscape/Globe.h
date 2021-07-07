@@ -215,8 +215,8 @@ public:
 	void resize();
 	/// Move the mouse back to where it started after we finish drag scrolling.
 	void stopScrolling(Action *action);
-	/// BUSCHER
-	void paintTheWorld();
+
+	std::list<Polygon*> getCachedPolygons();
 };
 
 }

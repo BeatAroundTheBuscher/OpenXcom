@@ -40,6 +40,8 @@ public:
 	~OverlayPolygon();
 
 	void init(const Mod *mod);
+	int getLayer1Value(int unsigned index);
+
 	void setGlobeShowMode(int mode);
 	int getGlobeShowMode() const;
 	void load(const YAML::Node &node);

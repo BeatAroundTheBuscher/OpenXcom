@@ -51,9 +51,23 @@ void OverlayPolygon::init(const Mod *mod)
 	for (std::list<Polygon*>::iterator i = _rGlobe->getPolygons()->begin(); i != _rGlobe->getPolygons()->end(); ++i)
 	{
 		//_layer1.push_back((*i)->getBuscherTexture());
-		_layer1.push_back(12);
+
+		int j = std::distance(_rGlobe->getPolygons()->begin(), i);
+		_layer1.push_back((j/13)%13);
 	}
 
+}
+
+int OverlayPolygon::getLayer1Value(unsigned int index)
+{
+	if (_layer1.size() > index)
+	{
+		return _layer1[index];
+	}
+	else
+	{
+		return 0;
+	}
 }
 
 /**

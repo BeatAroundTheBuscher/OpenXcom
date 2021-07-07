@@ -185,6 +185,8 @@ public:
 	void handleBaseDefense(Base *base, Ufo *ufo);
 	/// Update the resolution settings, we just resized the window.
 	void resize(int &dX, int &dY) override;
+	/// BUSCHER
+	void paintTheWorld(Globe* globe);
 private:
 	/// Handle alien mission generation.
 	void determineAlienMissions();
