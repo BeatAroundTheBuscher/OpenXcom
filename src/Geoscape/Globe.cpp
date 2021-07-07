@@ -56,6 +56,8 @@
 #include "../Interface/Cursor.h"
 #include "../Engine/Screen.h"
 
+#include "../Savegame/OverlayPolygon.h"
+
 namespace OpenXcom
 {
 
@@ -349,7 +351,7 @@ Globe::Globe(Game* game, int cenX, int cenY, int width, int height, int x, int y
 	_zoomOld = _zoom;
 
 	_buscherVal = 0;
-	_globeShowMode = 0;
+	//_overlayPolygon = new OverlayPolygon();
 
 	setupRadii(width, height);
 	setZoom(_zoom);
@@ -996,7 +998,8 @@ void Globe::drawLand()
 
 		// Apply textures according to zoom and shade
 
-		if (_globeShowMode)
+		OverlayPolygon* _overlayPolygon = _game->getSavedGame()->getOverlayPolygon();
+		if (_overlayPolygon->getGlobeShowMode())
 		{
 			//drawTexturedPolygon(x, y, (*i)->getPoints(), _texture->getFrame(_buscherVal), 0, 0);
 			drawTexturedPolygon(x, y, (*i)->getPoints(), _texture->getFrame((*i)->getBuscherTexture() + _zoomTexture), 0, 0);
@@ -2124,15 +2127,6 @@ void Globe::setCraftRange(double lon, double lat, double range)
 	_craftRange = range;
 }
 
-void Globe::setGlobeShowMode(int mode)
-{
-	_globeShowMode = mode;
-}
-
-int Globe::getGlobeShowMode() const
-{
-	return _globeShowMode;
-}
 
 void Globe::paintTheWorld()
 {

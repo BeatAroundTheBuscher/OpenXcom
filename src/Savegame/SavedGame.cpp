@@ -149,6 +149,7 @@ SavedGame::SavedGame() : _difficulty(DIFF_BEGINNER), _end(END_NONE), _ironman(fa
 {
 	_time = new GameTime(6, 1, 1, 1999, 12, 0, 0);
 	_alienStrategy = new AlienStrategy();
+	_overlayPolygon = new OverlayPolygon();
 	_funds.push_back(0);
 	_maintenance.push_back(0);
 	_researchScores.push_back(0);
@@ -224,6 +225,8 @@ SavedGame::~SavedGame()
 	{
 		delete *i;
 	}
+
+	delete _overlayPolygon;
 
 	delete _battleGame;
 }
@@ -787,6 +790,8 @@ void SavedGame::load(const std::string &filename, Mod *mod, Language *lang)
 		_battleGame->load(battle, mod, this);
 	}
 
+	_overlayPolygon->load(doc["overlayPolygon"]);
+
 	_scriptValues.load(doc, mod->getScriptGlobal());
 }
 
@@ -963,6 +968,9 @@ void SavedGame::save(const std::string &filename, Mod *mod) const
 	{
 		node["battleGame"] = _battleGame->save();
 	}
+
+	node["overlayPolygon"] = _overlayPolygon->save();
+
 	_scriptValues.save(node, mod->getScriptGlobal());
 
 	out << node;
@@ -3272,6 +3280,16 @@ void SavedGame::ScriptRegister(ScriptParserBase* parser)
 	sgg.addScriptValue<&SavedGame::_scriptValues>();
 
 	sgg.addDebugDisplay<&debugDisplayScript>();
+}
+
+void SavedGame::setOverlayPolygon(OverlayPolygon* op)
+{
+	_overlayPolygon = op;
+}
+
+OverlayPolygon* SavedGame::getOverlayPolygon() const
+{
+	return _overlayPolygon;
 }
 
 }

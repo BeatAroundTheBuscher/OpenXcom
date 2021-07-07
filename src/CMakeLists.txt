@@ -375,6 +375,7 @@ set ( savegame_src
   Savegame/Vehicle.cpp
   Savegame/Waypoint.cpp
   Savegame/WeightedOptions.cpp
+  Savegame/OverlayPolygon.cpp
 )
 
 set ( ufopedia_src

@@ -31,6 +31,8 @@
 #include "../Mod/RuleBaseFacility.h"
 #include "../Engine/Script.h"
 
+#include "OverlayPolygon.h"
+
 namespace OpenXcom
 {
 
@@ -174,6 +176,8 @@ private:
 	bool _disableSoldierEquipment;
 	bool _alienContainmentChecked;
 	ScriptValues<SavedGame> _scriptValues;
+
+	OverlayPolygon *_overlayPolygon;
 
 	static SaveInfo getSaveInfo(const std::string &file, Language *lang);
 public:
@@ -462,6 +466,9 @@ public:
 	void clearLinksForAlienBase(AlienBase* alienBase, const Mod* mod);
 	/// Gets the list of user notes.
 	std::vector<std::string>& getUserNotes() { return _userNotes; }
+
+	void setOverlayPolygon(OverlayPolygon* op);
+	OverlayPolygon* getOverlayPolygon() const;
 };
 
 }

@@ -129,6 +129,8 @@
 #include "../fmath.h"
 #include "../fallthrough.h"
 
+#include "../Savegame/OverlayPolygon.h"
+
 namespace OpenXcom
 {
 
@@ -4208,12 +4210,16 @@ void GeoscapeState::btnBuscherClick(Action *)
 
 	int i = 0;
 
-	i = _globe->getGlobeShowMode();
+	OverlayPolygon* _overlayPolygon = _game->getSavedGame()->getOverlayPolygon();
+
+	i = _overlayPolygon->getGlobeShowMode();
 	i++;
 	i = i % 2;
 
-	_globe->setGlobeShowMode(i);
+	_overlayPolygon->setGlobeShowMode(i);
 	//_game->pushState(new FundingState);
+
+	//		if (!_game->getSavedGame()->isIronman())
 }
 
 }

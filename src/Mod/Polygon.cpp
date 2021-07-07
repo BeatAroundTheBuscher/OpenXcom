@@ -26,7 +26,7 @@ namespace OpenXcom
  * Initializes the polygon with arrays to store each point's coordinates.
  * @param points Number of points.
  */
-Polygon::Polygon(int points) : _points(points), _texture(0), _buscherTexture(0)
+Polygon::Polygon(int points) : _points(points), _texture(0), _buscherTexture(0) // gets data from YAML during bootup
 {
 	_lat = new double[_points];
 	_lon = new double[_points];
@@ -45,7 +45,7 @@ Polygon::Polygon(int points) : _points(points), _texture(0), _buscherTexture(0)
  * Performs a deep copy of an existing polygon.
  * @param other Polygon to copy from.
  */
-Polygon::Polygon(const Polygon& other)
+Polygon::Polygon(const Polygon& other) // is used ingame
 {
 	_points = other._points;
 	_lat = new double[_points];
