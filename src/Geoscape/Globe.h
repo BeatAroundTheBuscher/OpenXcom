@@ -22,7 +22,7 @@
 #include "../Engine/InteractiveSurface.h"
 #include "../Engine/FastLineClip.h"
 #include "Cord.h"
-#include "../Savegame/OverlayPolygon.h"
+//#include "../Savegame/OverlayPolygon.h"
 
 namespace OpenXcom
 {

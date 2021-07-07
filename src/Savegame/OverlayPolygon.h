@@ -22,19 +22,24 @@
 
 namespace OpenXcom
 {
-
+//class Game;
+class Mod;
 /**
  * Represents an alien base on the world.
  */
 class OverlayPolygon
 {
 private:
+//	Game *_game;
 	int _globeShowMode;
+	std::vector<int> _layer1; //assuming that the amount of polygons stay the same over the savegames
 public:
 	/// Creates an alien base.
 	OverlayPolygon();
 	/// Cleans up the alien base.
 	~OverlayPolygon();
+
+	void init(const Mod *mod);
 	void setGlobeShowMode(int mode);
 	int getGlobeShowMode() const;
 	void load(const YAML::Node &node);

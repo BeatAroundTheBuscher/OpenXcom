@@ -19,6 +19,12 @@
 #include "OverlayPolygon.h"
 #include "../Engine/Language.h"
 
+#include "../Mod/RuleGlobe.h"
+#include "../Mod/Polygon.h"
+#include "../Engine/State.h"
+#include "../Engine/Game.h"
+#include "../Mod/Mod.h"
+
 namespace OpenXcom
 {
 
@@ -27,7 +33,7 @@ namespace OpenXcom
  */
 OverlayPolygon::OverlayPolygon() : _globeShowMode(0)
 {
-	
+
 }
 
 /**
@@ -35,6 +41,19 @@ OverlayPolygon::OverlayPolygon() : _globeShowMode(0)
  */
 OverlayPolygon::~OverlayPolygon()
 {
+}
+
+
+void OverlayPolygon::init(const Mod *mod)
+{
+	RuleGlobe* _rGlobe = mod->getGlobe();
+
+	for (std::list<Polygon*>::iterator i = _rGlobe->getPolygons()->begin(); i != _rGlobe->getPolygons()->end(); ++i)
+	{
+		//_layer1.push_back((*i)->getBuscherTexture());
+		_layer1.push_back(12);
+	}
+
 }
 
 /**

@@ -360,6 +360,10 @@ public:
 	bool getWarned() const;
 	/// sets whether or not the player has been warned
 	void setWarned(bool warned);
+
+	/// BUSCHER
+	OverlayPolygon &getOverlayPolygon() { return *_overlayPolygon; }
+	const OverlayPolygon &getOverlayPolygon() const { return *_overlayPolygon; }
 	/// Full access to the alien strategy data.
 	AlienStrategy &getAlienStrategy() { return *_alienStrategy; }
 	/// Read-only access to the alien strategy data.
@@ -466,9 +470,6 @@ public:
 	void clearLinksForAlienBase(AlienBase* alienBase, const Mod* mod);
 	/// Gets the list of user notes.
 	std::vector<std::string>& getUserNotes() { return _userNotes; }
-
-	void setOverlayPolygon(OverlayPolygon* op);
-	OverlayPolygon* getOverlayPolygon() const;
 };
 
 }

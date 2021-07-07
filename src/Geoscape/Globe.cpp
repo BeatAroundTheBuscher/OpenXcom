@@ -998,8 +998,8 @@ void Globe::drawLand()
 
 		// Apply textures according to zoom and shade
 
-		OverlayPolygon* _overlayPolygon = _game->getSavedGame()->getOverlayPolygon();
-		if (_overlayPolygon->getGlobeShowMode())
+		OverlayPolygon _overlayPolygon = _game->getSavedGame()->getOverlayPolygon();
+		if (_overlayPolygon.getGlobeShowMode())
 		{
 			//drawTexturedPolygon(x, y, (*i)->getPoints(), _texture->getFrame(_buscherVal), 0, 0);
 			drawTexturedPolygon(x, y, (*i)->getPoints(), _texture->getFrame((*i)->getBuscherTexture() + _zoomTexture), 0, 0);

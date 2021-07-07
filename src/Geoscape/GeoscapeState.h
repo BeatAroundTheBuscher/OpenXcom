@@ -37,6 +37,8 @@ class MissionSite;
 class Base;
 class RuleMissionScript;
 
+class OverlayPolygon;
+
 /**
  * Geoscape screen which shows an overview of
  * the world and lets the player manage the game.
@@ -62,6 +64,8 @@ private:
 	std::vector<Craft*> _activeCrafts;
 	size_t _minimizedDogfights;
 	int _slowdownCounter;
+
+	OverlayPolygon *_overlayPolygon;
 
 	/// Update list of active crafts.
 	const std::vector<Craft*>* updateActiveCrafts();

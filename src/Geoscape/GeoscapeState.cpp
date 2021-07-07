@@ -4210,13 +4210,14 @@ void GeoscapeState::btnBuscherClick(Action *)
 
 	int i = 0;
 
-	OverlayPolygon* _overlayPolygon = _game->getSavedGame()->getOverlayPolygon();
+	//OverlayPolygon* _overlayPolygon = &(_game->getSavedGame()->getOverlayPolygon());
+	OverlayPolygon &overlayPolygon = (_game->getSavedGame()->getOverlayPolygon());
 
-	i = _overlayPolygon->getGlobeShowMode();
+	i = overlayPolygon.getGlobeShowMode();
 	i++;
 	i = i % 2;
 
-	_overlayPolygon->setGlobeShowMode(i);
+	overlayPolygon.setGlobeShowMode(i);
 	//_game->pushState(new FundingState);
 
 	//		if (!_game->getSavedGame()->isIronman())

@@ -3282,14 +3282,4 @@ void SavedGame::ScriptRegister(ScriptParserBase* parser)
 	sgg.addDebugDisplay<&debugDisplayScript>();
 }
 
-void SavedGame::setOverlayPolygon(OverlayPolygon* op)
-{
-	_overlayPolygon = op;
-}
-
-OverlayPolygon* SavedGame::getOverlayPolygon() const
-{
-	return _overlayPolygon;
-}
-
 }

@@ -3326,6 +3326,8 @@ SavedGame *Mod::newSave(GameDifficulty diff) const
 	save->getAlienStrategy().init(this);
 	save->setTime(_startingTime);
 
+	save->getOverlayPolygon().init(this);
+
 	return save;
 }
 
