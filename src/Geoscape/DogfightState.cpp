@@ -742,8 +742,9 @@ void DogfightState::think()
 	if (!_ufoIsAttacking)
 	{
 		Ufo *u = dynamic_cast<Ufo*>(_craft->getDestination());
-		Craft *craftTarget = dynamic_cast<Craft*>(_craft->getDestination()); // escorting
-		if (!_craft->isInDogfight() || ( u != _ufo && craftTarget == 0) ||_ufo->getStatus() == Ufo::LANDED)
+		Craft *wingLeader = dynamic_cast<Craft*>(_craft->getDestination()); // for escorts
+		Ufo *ufoTargedByWingLeader = (wingLeader != 0) ? dynamic_cast<Ufo*>(wingLeader->getDestination()) : 0;
+		if (!_craft->isInDogfight() || ( u != _ufo && ufoTargedByWingLeader != _ufo) ||_ufo->getStatus() == Ufo::LANDED)
 		{
 			endDogfight();
 		}
@@ -927,8 +928,9 @@ void DogfightState::update()
 	if (!_ufoIsAttacking)
 	{
 		Ufo *u = dynamic_cast<Ufo*>(_craft->getDestination());
-		Craft *craftTarget = dynamic_cast<Craft*>(_craft->getDestination()); // escorting
-		if ((u != _ufo && craftTarget == 0) || !_craft->isInDogfight() || _craft->getLowFuel() || (_minimized && _ufo->isCrashed()))
+		Craft *wingLeader = dynamic_cast<Craft*>(_craft->getDestination()); // for escorts
+		Ufo *ufoTargedByWingLeader = (wingLeader != 0) ? dynamic_cast<Ufo*>(wingLeader->getDestination()) : 0;
+		if (( u != _ufo && ufoTargedByWingLeader != _ufo) || !_craft->isInDogfight() || _craft->getLowFuel() || (_minimized && _ufo->isCrashed()))
 		{
 			endDogfight();
 			return;
