@@ -1237,7 +1237,8 @@ void GeoscapeState::time5Seconds()
 							DogfightState* dogfight = new DogfightState(this, (*j), u, u->isHunterKiller());
 							_dogfightsToBeStarted.push_back(dogfight);
 
-							if (u->isHunterKiller() && _game->getMod()->getEscortsJoinFightAgainstHK())
+							//if (u->isHunterKiller() && _game->getMod()->getEscortsJoinFightAgainstHK())
+							if (_game->getMod()->getEscortsJoinFightAgainstHK())
 							{
 								// Start fighting escorts and other craft as well (if they are in escort range)
 								int secondaryTargets = 0;

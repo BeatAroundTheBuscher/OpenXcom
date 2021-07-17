@@ -741,7 +741,9 @@ void DogfightState::think()
 	}
 	if (!_ufoIsAttacking)
 	{
-		if (!_craft->isInDogfight() || _craft->getDestination() != _ufo || _ufo->getStatus() == Ufo::LANDED)
+		Ufo *u = dynamic_cast<Ufo*>(_craft->getDestination());
+		Craft *craftTarget = dynamic_cast<Craft*>(_craft->getDestination()); // escorting
+		if (!_craft->isInDogfight() || ( u != _ufo && craftTarget == 0) ||_ufo->getStatus() == Ufo::LANDED)
 		{
 			endDogfight();
 		}
@@ -924,8 +926,9 @@ void DogfightState::update()
 	// Check if crafts destination hasn't been changed when window minimized.
 	if (!_ufoIsAttacking)
 	{
-		Ufo* u = dynamic_cast<Ufo*>(_craft->getDestination());
-		if (u != _ufo || !_craft->isInDogfight() || _craft->getLowFuel() || (_minimized && _ufo->isCrashed()))
+		Ufo *u = dynamic_cast<Ufo*>(_craft->getDestination());
+		Craft *craftTarget = dynamic_cast<Craft*>(_craft->getDestination()); // escorting
+		if ((u != _ufo && craftTarget == 0) || !_craft->isInDogfight() || _craft->getLowFuel() || (_minimized && _ufo->isCrashed()))
 		{
 			endDogfight();
 			return;
