@@ -1126,7 +1126,7 @@ void GeoscapeState::time5Seconds()
 			}
 			if ((*j)->getDestination() != 0)
 			{
-				Ufo* u = dynamic_cast<Ufo*>((*j)->getDestination());
+				Ufo* u = dynamic_cast<Ufo*>((*j)->getDestinationForWing());
 				if (u != 0)
 				{
 					if (!u->getDetected())
@@ -1237,13 +1237,14 @@ void GeoscapeState::time5Seconds()
 							DogfightState* dogfight = new DogfightState(this, (*j), u, u->isHunterKiller());
 							_dogfightsToBeStarted.push_back(dogfight);
 
-							if (u->isHunterKiller() && _game->getMod()->getEscortsJoinFightAgainstHK())
+							//if (u->isHunterKiller() && _game->getMod()->getEscortsJoinFightAgainstHK())
+							if (_game->getMod()->getEscortsJoinFightAgainstHK())
 							{
 								// Start fighting escorts and other craft as well (if they are in escort range)
 								int secondaryTargets = 0;
 								for (auto craft : *activeCrafts)
 								{
-									if (!craft->getMissionComplete() && craft != (*j))
+									if (!craft->getMissionComplete() && craft != (*j) && !(*j)->isInDogfight())
 									{
 										// craft is close enough and has at least one loaded weapon
 										if (craft->getNumWeapons(true) > 0 && craft->getDistance((*j)) < Nautical(_game->getMod()->getEscortRange()))
@@ -1363,6 +1364,36 @@ void GeoscapeState::time5Seconds()
 					{
 						(*j)->returnToBase();
 					}
+					else if (x->isInDogfight() && !(*j)->isInDogfight() && _game->getMod()->getEscortsJoinFightAgainstHK())
+					{
+						Ufo* ufo = dynamic_cast<Ufo*>((*j)->getDestinationForWing());
+						// Start fighting escorts and other craft as well (if they are in escort range)
+						int currentInterceptors = _dogfights.size() + _dogfightsToBeStarted.size();
+
+						if (!(*j)->getMissionComplete())
+						{
+							// craft is close enough and has at least one loaded weapon
+							if ((*j)->getNumWeapons(true) > 0 && (*j)->getDistance((x)) < Nautical(_game->getMod()->getEscortRange()))
+							{
+								// only up to 4 dogfights = 1 main + 3 secondary
+								if (currentInterceptors < 4)
+								{
+									// Note: push_front() is used so that main target is attacked first
+									_dogfightsToBeStarted.push_front(new DogfightState(this, (*j), ufo, ufo->isHunterKiller()));
+
+									if (!_dogfightStartTimer->isRunning())
+									{ 
+										_pause = true;
+										timerReset();
+										_globe->center((*j)->getLongitude(), (*j)->getLatitude());
+										startDogfight();
+										_dogfightStartTimer->start();
+									}
+								}
+							}
+						}
+					}
+					
 				}
 			}
 			 ++j;
