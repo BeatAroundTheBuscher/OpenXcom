@@ -31,6 +31,8 @@ class SkillMenuState : public ActionMenuState
 private:
 	/// Check if the given soldier has all the required soldier bonuses for this soldier skill.
 	bool soldierHasAllRequiredBonusesForSkill(Soldier *soldier, const RuleSkill *skillRules);
+	/// Check if the given soldier has the required armor for this soldier skill.
+	bool soldierHasRequiredArmorForSkill(Soldier *soldier, const RuleSkill *skillRules);
 	/// Adds a new menu item for an action.
 	void addItem(const RuleSkill* skill, int *id, SDLKey key);
 	/// Choose an action weapon based on given parameters.

@@ -26,6 +26,7 @@
 #include "../Mod/RuleSkill.h"
 #include "../Mod/RuleSoldier.h"
 #include "../Mod/RuleSoldierBonus.h"
+#include "../Mod/Armor.h"
 #include "../Savegame/BattleItem.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/SavedBattleGame.h"
@@ -78,6 +79,7 @@ SkillMenuState::SkillMenuState(BattleAction *action, int x, int y) : ActionMenuS
 	{
 		if (!hotkeys.empty()
 			&& soldierHasAllRequiredBonusesForSkill(soldier, skill)
+			&& soldierHasRequiredArmorForSkill(soldier, skill)
 			&& (skill->getCost().Time > 0 || skill->getCost().Mana > 0)
 			&& (!skill->isPsiRequired() || _action->actor->getBaseStats()->psiSkill > 0))
 		{
@@ -131,6 +133,29 @@ bool SkillMenuState::soldierHasAllRequiredBonusesForSkill(Soldier *soldier, cons
 			return false;
 	}
 	return true;
+}
+
+/**
+ * Check if the given soldier has all the required armors for this soldier skill.
+ * @param soldier Soldier to check.
+ * @param skillRules Skill rules.
+ */
+bool SkillMenuState::soldierHasRequiredArmorForSkill(Soldier *soldier, const RuleSkill *skillRules)
+{
+	bool found = false;
+	for (auto requiredArmorRule : skillRules->getRequiredArmors())
+	{
+		const std::string& equippedArmor = soldier->getArmor()->getType();
+		if (equippedArmor == requiredArmorRule->getType())
+		{
+			found = true;
+			break;
+		}
+	}
+	if (!found)
+		return false;
+	else
+		return true;
 }
 
 /**

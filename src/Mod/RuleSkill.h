@@ -21,6 +21,7 @@
 #include <vector>
 #include "RuleItem.h"
 #include "RuleSoldierBonus.h"
+#include "Armor.h"
 #include "ModScript.h"
 
 namespace OpenXcom
@@ -40,8 +41,10 @@ private:
 	RuleItemUseCost _flat;
 	std::vector<std::string> _compatibleWeaponNames;
 	std::vector<std::string> _requiredBonusNames;
+	std::vector<std::string> _requiredArmorNames;
 	std::vector<const RuleItem*> _compatibleWeapons;
 	std::vector<const RuleSoldierBonus*> _requiredBonuses;
+	std::vector<const Armor*> _requiredArmors;
 
 	ScriptValues<RuleSkill> _scriptValues;
 	ModScript::SkillScripts::Container _skillScripts;
@@ -74,6 +77,8 @@ public:
 	const std::vector<const RuleItem*>& getCompatibleWeapons() const { return _compatibleWeapons; }
 	/// Gets the list of required soldier bonuses for this skill.
 	const std::vector<const RuleSoldierBonus*>& getRequiredBonuses() const { return _requiredBonuses; }
+	/// Gets the list of required armors for this skill.
+	const std::vector<const Armor*>& getRequiredArmors() const { return _requiredArmors; }
 
 	/// Name of class used in script.
 	static constexpr const char* ScriptName = "RuleSkill";

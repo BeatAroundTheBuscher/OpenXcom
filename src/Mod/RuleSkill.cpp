@@ -61,6 +61,7 @@ void RuleSkill::load(const YAML::Node& node, Mod *mod, const ModScript& parsers)
 
 	mod->loadUnorderedNames(_type, _compatibleWeaponNames, node["compatibleWeapons"]);
 	mod->loadUnorderedNames(_type,_requiredBonusNames, node["requiredBonuses"]);
+	mod->loadUnorderedNames(_type,_requiredArmorNames, node["requiredArmors"]);
 
 	_scriptValues.load(node, parsers.getShared());
 
@@ -74,10 +75,12 @@ void RuleSkill::afterLoad(const Mod* mod)
 {
 	mod->linkRule(_compatibleWeapons, _compatibleWeaponNames);
 	mod->linkRule(_requiredBonuses, _requiredBonusNames);
+	mod->linkRule(_requiredArmors, _requiredArmorNames);
 
 	//remove not needed data
 	Collections::removeAll(_compatibleWeaponNames);
 	Collections::removeAll(_requiredBonusNames);
+	Collections::removeAll(_requiredArmorNames);
 }
 
 
