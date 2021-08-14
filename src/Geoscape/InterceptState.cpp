@@ -60,19 +60,19 @@ InterceptState::InterceptState(Globe *globe, Base *base, Target *target) : _glob
 	// Create objects
 	if (Options::oxceInterceptGuiMaintenanceTimeHidden > 0)
 	{
-		_window = new Window(this, 320, 140, 0, 30, POPUP_HORIZONTAL);
-		_btnCancel = new TextButton(_base ? 142 : 288, 16, 16, 146);
-		_btnGotoBase = new TextButton(142, 16, 162, 146);
-		_txtTitle = new Text(300, 17, 10, 46);
+		_window = new Window(this, 320, 200, 0, 0, POPUP_HORIZONTAL);
+		_btnCancel = new TextButton(_base ? 142 : 288, 16, 16, 176);
+		_btnGotoBase = new TextButton(142, 16, 162, 176);
+		_txtTitle = new Text(300, 17, 10, 16);
 		int x = 14;
-		_txtCraft = new Text(WIDTH_CRAFT, 9, x, 70);
+		_txtCraft = new Text(WIDTH_CRAFT, 9, x, 40);
 		x += WIDTH_CRAFT;
-		_txtStatus = new Text(WIDTH_STATUS, 9, x, 70);
+		_txtStatus = new Text(WIDTH_STATUS, 9, x, 40);
 		x += WIDTH_STATUS;
-		_txtBase = new Text(WIDTH_BASE, 9, x, 70);
+		_txtBase = new Text(WIDTH_BASE, 9, x, 40);
 		x += WIDTH_BASE;
-		_txtWeapons = new Text(WIDTH_WEAPONS+4, 17, x-4, 62);
-		_lstCrafts = new TextList(290, 64, 12, 78);
+		_txtWeapons = new Text(WIDTH_WEAPONS+4, 17, x-4, 32);
+		_lstCrafts = new TextList(290, 120, 12, 48);
 	}
 	else
 	{
