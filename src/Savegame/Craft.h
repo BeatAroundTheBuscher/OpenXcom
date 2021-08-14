@@ -116,6 +116,10 @@ public:
 	void setStatus(const std::string &status);
 	/// Gets the craft's altitude.
 	std::string getAltitude() const;
+ 	/// Returns the wing leader of the moving target
+	Craft *getWingLeader() const;
+	/// Gets the moving target's or the wing leader's destination.
+	Target *getDestinationForWing() const;
 	/// Sets the craft's destination.
 	void setDestination(Target *dest) override;
 	/// Gets whether the craft is on auto patrol.
@@ -256,6 +260,8 @@ public:
 	int getVehicleCount(const std::string &vehicle) const;
 	/// Sets the craft's dogfight status.
 	void setInDogfight(const bool inDogfight);
+	/// Gets if the craft's wing is in dogfight.
+	bool isWingInDogfight() const;
 	/// Gets if the craft is in dogfight.
 	bool isInDogfight() const;
 	/// Sets interception order (first craft to leave the base gets 1, second 2, etc.).

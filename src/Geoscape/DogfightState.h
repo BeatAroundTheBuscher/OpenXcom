@@ -173,6 +173,8 @@ public:
 	bool getWaitForAltitude() const;
 	/// Award experience to the pilots.
 	void awardExperienceToPilots();
+	/// Select new Wing Leader after the current one has been destroyed or has disengaged
+	void selectNextWingLeader(Craft* previousWingLeader);
 };
 
 }

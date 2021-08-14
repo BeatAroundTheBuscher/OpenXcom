@@ -741,7 +741,7 @@ void DogfightState::think()
 	}
 	if (!_ufoIsAttacking)
 	{
-		if (!_craft->isInDogfight() || _craft->getDestination() != _ufo || _ufo->getStatus() == Ufo::LANDED)
+		if (!_craft->isWingInDogfight() || _craft->getDestinationForWing() != _ufo || _ufo->getStatus() == Ufo::LANDED)
 		{
 			endDogfight();
 		}
@@ -924,8 +924,8 @@ void DogfightState::update()
 	// Check if crafts destination hasn't been changed when window minimized.
 	if (!_ufoIsAttacking)
 	{
-		Ufo* u = dynamic_cast<Ufo*>(_craft->getDestination());
-		if (u != _ufo || !_craft->isInDogfight() || _craft->getLowFuel() || (_minimized && _ufo->isCrashed()))
+		Ufo* u = dynamic_cast<Ufo*>(_craft->getDestinationForWing());
+		if (u != _ufo || !_craft->isWingInDogfight() || _craft->getLowFuel() || (_minimized && _ufo->isCrashed()))
 		{
 			endDogfight();
 			return;
@@ -1385,6 +1385,9 @@ void DogfightState::update()
 			// keep original target
 			if (_mode == _btnDisengage || _craft->getDestination() == _ufo || !Options::oxceKeepCraftCommandsAfterDogfight)
 			{
+				//Reissue orders to the remaining wing when wing leader has disengaged from battle
+				selectNextWingLeader(_craft);
+
 				_craft->returnToBase();
 			}
 			
@@ -1428,6 +1431,10 @@ void DogfightState::update()
 		else if (_craft->isDestroyed())
 		{
 			// End dogfight if craft is destroyed.
+
+			//Reissue orders to the remaining wing when wing leader is destroyed
+			selectNextWingLeader(_craft);
+
 			setStatus("STR_INTERCEPTOR_DESTROYED");
 			if (_ufoIsAttacking)
 			{
@@ -2545,6 +2552,26 @@ void DogfightState::awardExperienceToPilots()
 			(*it)->calcStatString(_game->getMod()->getStatStrings(), psiStrengthEval);
 		}
 		_experienceAwarded = true;
+	}
+}
+
+void DogfightState::selectNextWingLeader(Craft* previousWingLeader)
+{
+	//Reissue orders when wing leader is destroyed
+	std::vector<Craft*> remainingWing = previousWingLeader->getCraftFollowers();
+	if (remainingWing.size() > 0)
+	{
+		for (std::vector<Craft*>::const_iterator i = remainingWing.begin(); i != remainingWing.end(); ++i)
+		{
+			if ((*i) == remainingWing.front())
+			{
+				(*i)->setDestination(previousWingLeader->getDestination());
+			}
+			else
+			{
+				(*i)->setDestination(remainingWing.front());
+			}
+		}
 	}
 }
 

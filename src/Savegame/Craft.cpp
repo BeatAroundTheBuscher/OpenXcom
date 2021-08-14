@@ -485,6 +485,31 @@ std::string Craft::getAltitude() const
 	}
 }
 
+/**
+ * Returns the wing leader of the moving target
+ * @return Pointer to wing leader.
+ */
+Craft *Craft::getWingLeader() const
+{
+	return dynamic_cast<Craft*>(this->getDestination());
+}
+
+/**
+ * Returns the destination the moving target or its wing leader is heading to.
+ * @return Pointer to destination.
+ */
+Target *Craft::getDestinationForWing() const
+{
+	Craft *wingLeader = this->getWingLeader();
+	if (wingLeader != nullptr) // 0)
+	{
+		return (wingLeader->getDestination());
+	}
+	else
+	{
+		return _dest;
+	}
+}
 
 /**
  * Changes the destination the craft is heading to.
@@ -1620,6 +1645,15 @@ int Craft::getVehicleCount(const std::string &vehicle) const
 		}
 	}
 	return total;
+}
+
+/**
+ * Returns the craft's wing dogfight status.
+ * @return Is the craft ion a dogfight?
+ */
+bool Craft::isWingInDogfight() const
+{
+	return (this->getWingLeader() != nullptr && this->getWingLeader()->isInDogfight()) || this->isInDogfight();
 }
 
 /**
