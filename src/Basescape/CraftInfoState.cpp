@@ -88,6 +88,8 @@ CraftInfoState::CraftInfoState(Base *base, size_t craftId) : _base(base), _craft
 	_btnArmor = new TextButton(64, 16, 16, bottom + 2 * bottom_row);
 	_btnPilots = new TextButton(64, 16, 16, bottom + 3 * bottom_row);
 	_edtCraft = new TextEdit(this, 140, 16, 80, 8);
+	_btnPreviousCraft = new TextButton(16, 12, 14, 8);
+	_btnNextCraft = new TextButton(16, 12, 290, 8);
 	_txtDamage = new Text(100, 17, 14, 24);
 	_txtShield = new Text(100, 17, 120, 24);
 	_txtFuel = new Text(82, 17, 228, 24);
@@ -124,6 +126,8 @@ CraftInfoState::CraftInfoState(Base *base, size_t craftId) : _base(base), _craft
 	add(_btnArmor, "button", "craftInfo");
 	add(_btnPilots, "button", "craftInfo");
 	add(_edtCraft, "text1", "craftInfo");
+	add(_btnPreviousCraft, "button", "craftInfo");
+	add(_btnNextCraft, "button", "craftInfo");
 	add(_txtDamage, "text1", "craftInfo");
 	add(_txtShield, "text1", "craftInfo");
 	add(_txtFuel, "text1", "craftInfo");
@@ -174,6 +178,12 @@ CraftInfoState::CraftInfoState(Base *base, size_t craftId) : _base(base), _craft
 	_edtCraft->setBig();
 	_edtCraft->setAlign(ALIGN_CENTER);
 	_edtCraft->onChange((ActionHandler)&CraftInfoState::edtCraftChange);
+
+	_btnPreviousCraft->setText("<<");
+	_btnPreviousCraft->onMouseClick((ActionHandler)&CraftInfoState::btnPreviousCraftClick);
+
+	_btnNextCraft->setText(">>");
+	_btnNextCraft->onMouseClick((ActionHandler)&CraftInfoState::btnNextCraftClick);
 
 	_txtSkin->setAlign(ALIGN_CENTER);
 	if (_craft->getRules()->getMaxSkinIndex() > 0)
@@ -526,6 +536,39 @@ void CraftInfoState::edtCraftChange(Action *action)
 	{
 		_edtCraft->setText(_craft->getName(_game->getLanguage()));
 	}
+}
+
+/**
+ * Goes to the next craft in the current screen.
+ * @param action Pointer to an action.
+ */
+void CraftInfoState::btnNextCraftClick(Action *)
+{
+	_craftId++;
+	if (_craftId >= _base->getCrafts()->size())
+		_craftId = 0;
+
+	_game->popState();
+	_game->pushState(new CraftInfoState(_base, _craftId));
+}
+
+/**
+ * Goes to the previous craft in the current screen.
+ * @param action Pointer to an action.
+ */
+void CraftInfoState::btnPreviousCraftClick(Action *)
+{
+	if (_craftId == 0)
+	{
+		_craftId = _base->getCrafts()->size() - 1;
+	}
+	else
+	{
+		_craftId--;
+	}
+
+	_game->popState();
+	_game->pushState(new CraftInfoState(_base, _craftId));
 }
 
 }

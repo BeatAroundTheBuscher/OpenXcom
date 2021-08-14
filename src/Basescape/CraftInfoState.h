@@ -44,7 +44,7 @@ private:
 	Craft *_craft;
 	int _weaponNum;
 
-	TextButton *_btnOk, *_btnW[RuleCraft::WeaponMax], *_btnCrew, *_btnEquip, *_btnArmor, *_btnPilots;
+	TextButton *_btnOk, *_btnW[RuleCraft::WeaponMax], *_btnCrew, *_btnEquip, *_btnArmor, *_btnPilots, *_btnPreviousCraft, *_btnNextCraft;
 	Window *_window;
 	TextEdit *_edtCraft;
 	Text *_txtDamage, *_txtShield, *_txtFuel, *_txtSkin;
@@ -80,6 +80,10 @@ public:
 	void btnPilotsClick(Action *action);
 	/// Handler for changing the text on the Name edit.
 	void edtCraftChange(Action *action);
+	/// Handler for clicking the Next Craft button.
+	void btnNextCraftClick(Action *action);
+	/// Handler for clicking the Previous Craft button.
+	void btnPreviousCraftClick(Action *action);
 };
 
 }
