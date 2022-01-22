@@ -120,6 +120,8 @@ public:
 	int getMissionTotalFiltered(std::vector<MissionStatistics*>*, const RuleCommendations* rule) const;
 	/// Get the total number of wins.
 	int getWinTotal(std::vector<MissionStatistics*>*) const;
+	/// Get the total number of wins with a positive score.
+	int getWinTotalWithPositiveScore(std::vector<MissionStatistics*>*) const;
 	/// Get the total number of stuns.
 	int getStunTotal() const;
 	/// Get the total number of psi panics.

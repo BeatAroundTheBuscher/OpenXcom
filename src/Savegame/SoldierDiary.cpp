@@ -309,6 +309,7 @@ bool SoldierDiary::manageCommendations(Mod *mod, std::vector<MissionStatistics*>
 				  ( ((*j).first == "totalKills" && (unsigned int)getKillTotal() < (unsigned int)(*j).second.at(nextCommendationLevel["noNoun"])) ||
 					((*j).first == "totalMissions" && getMissionTotalFiltered(missionStatistics, (*i).second) < (*j).second.at(nextCommendationLevel["noNoun"])) ||
 					((*j).first == "totalWins" && getWinTotal(missionStatistics) < (*j).second.at(nextCommendationLevel["noNoun"])) ||
+					((*j).first == "totalWinsWithPositiveScore" && getWinTotalWithPositiveScore(missionStatistics) < (*j).second.at(nextCommendationLevel["noNoun"])) ||
 					((*j).first == "totalScore" && getScoreTotal(missionStatistics) < (*j).second.at(nextCommendationLevel["noNoun"])) ||
 					((*j).first == "totalStuns" && getStunTotal() < (*j).second.at(nextCommendationLevel["noNoun"])) ||
 					((*j).first == "totalDaysWounded" && _daysWoundedTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
@@ -835,6 +836,31 @@ int SoldierDiary::getWinTotal(std::vector<MissionStatistics*> *missionStatistics
 			if ((*j) == (*i)->id)
 			{
 				if ((*i)->success)
+				{
+					winTotal++;
+				}
+			}
+		}
+	}
+
+	return winTotal;
+}
+
+/**
+ *  Get the total if wins which have a positive score.
+ *  @param Mission Statistics
+ */
+int SoldierDiary::getWinTotalWithPositiveScore(std::vector<MissionStatistics*> *missionStatistics) const
+{
+	int winTotal = 0;
+
+	for (std::vector<MissionStatistics*>::const_iterator i = missionStatistics->begin(); i != missionStatistics->end(); ++i)
+	{
+		for (std::vector<int>::const_iterator j = _missionIdList.begin(); j != _missionIdList.end(); ++j)
+		{
+			if ((*j) == (*i)->id)
+			{
+				if ((*i)->success && (*i)->score > 0)
 				{
 					winTotal++;
 				}
