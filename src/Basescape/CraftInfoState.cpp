@@ -35,6 +35,7 @@
 #include "../Savegame/CraftWeapon.h"
 #include "../Mod/Armor.h"
 #include "../Mod/RuleCraftWeapon.h"
+#include "../Mod/RuleInterface.h"
 #include "../Savegame/Base.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Vehicle.h"
@@ -153,7 +154,8 @@ CraftInfoState::CraftInfoState(Base *base, size_t craftId) : _base(base), _craft
 		const char num[] = { char('1' + i), 0 };
 		_btnW[i]->setText(num);
 		_btnW[i]->onMouseClick((ActionHandler)&CraftInfoState::btnWClick);
-		_weapon[i]->onMouseClick((ActionHandler)&CraftInfoState::btnWIconClick);
+		_weapon[i]->onMouseClick((ActionHandler)&CraftInfoState::btnWIconLeftClick, SDL_BUTTON_LEFT);
+		_weapon[i]->onMouseClick((ActionHandler)&CraftInfoState::btnWIconRightClick, SDL_BUTTON_RIGHT);
 	}
 
 	_sprite->onMouseClick((ActionHandler)&CraftInfoState::btnCraftIconClick);
@@ -185,6 +187,14 @@ CraftInfoState::CraftInfoState(Base *base, size_t craftId) : _base(base), _craft
 	{
 		_txtWName[i]->setWordWrap(true);
 	}
+
+	// load from interfaces: - type: dogfight - id: disabledWeapon; ToDo: Correct Palette and Indices
+	// Set up objects
+	RuleInterface *dogfightInterface = _game->getMod()->getInterface("dogfight");
+
+	// define the colors to be used
+	_colors[DISABLED_WEAPON] = dogfightInterface->getElement("disabledWeapon")->color;
+	
 }
 
 /**
@@ -327,7 +337,9 @@ void CraftInfoState::init()
 			frame->blitNShade(_weapon[i], 0, 0);
 
 			std::ostringstream weaponLine;
-			if (w1->isDisabled()) weaponLine << "*";
+			if (w1->isReloadingDisabled()) weaponLine << "*";
+			if (w1->isDisabled()) recolorWeapon(i, false);
+
 			weaponLine << Unicode::TOK_COLOR_FLIP << tr(w1->getRules()->getType());
 			_txtWName[i]->setText(weaponLine.str());
 			weaponLine.str("");
@@ -335,7 +347,7 @@ void CraftInfoState::init()
 			{
 				weaponLine << tr("STR_AMMO_").arg(w1->getAmmo()) << "\n" << Unicode::TOK_COLOR_FLIP;
 				weaponLine << tr("STR_MAX").arg(w1->getRules()->getAmmoMax());
-				if (_craft->getStatus() == "STR_REARMING" && w1->getAmmo() < w1->getRules()->getAmmoMax() && !w1->isDisabled())
+				if (_craft->getStatus() == "STR_REARMING" && w1->getAmmo() < w1->getRules()->getAmmoMax() && !w1->isReloadingDisabled())
 				{
 					int rearmHours = (int)ceil((double)(w1->getRules()->getAmmoMax() - w1->getAmmo()) / w1->getRules()->getRearmRate());
 					weaponLine << formatTime(rearmHours);
@@ -422,7 +434,7 @@ void CraftInfoState::btnWClick(Action * act)
  * Toggles the enabled/disabled status of the weapon.
  * @param action Pointer to an action.
  */
-void CraftInfoState::btnWIconClick(Action *action)
+void CraftInfoState::btnWIconLeftClick(Action *action)
 {
 	for(int i = 0; i < _weaponNum; ++i)
 	{
@@ -434,8 +446,32 @@ void CraftInfoState::btnWIconClick(Action *action)
 				// Toggle the weapon status
 				w1->setDisabled(!w1->isDisabled());
 
+				// Update the onscreen info.
+				// Note: This method is overkill, since we only need to update a few things. But at least this ensures we haven't missed anything.
+				init();
+			}
+		}
+	}
+}
+
+/**
+ * Toggles the reload status of the weapon.
+ * @param action Pointer to an action.
+ */
+void CraftInfoState::btnWIconRightClick(Action *action)
+{
+	for(int i = 0; i < _weaponNum; ++i)
+	{
+		if (action->getSender() == _weapon[i])
+		{
+			CraftWeapon *w1 = _craft->getWeapons()->at(i);
+			if (w1)
+			{
+				// Toggle the weapon status
+				w1->setReloadingDisabled(!w1->isReloadingDisabled());
+
 				// If we just enabled the weapon, we should begin rearming immediately.
-				if (!w1->isDisabled())
+				if (!w1->isReloadingDisabled())
 				{
 					_craft->checkup();
 				}
@@ -526,6 +562,27 @@ void CraftInfoState::edtCraftChange(Action *action)
 	{
 		_edtCraft->setText(_craft->getName(_game->getLanguage()));
 	}
+}
+
+/**
+ * Changes colors of weapon icons, range indicators and ammo texts base on current weapon state.
+ * @param weaponNo - number of weapon for which colors must be changed.
+ * @param currentState - state of weapon (enabled = true, disabled = false).
+ */
+void CraftInfoState::recolorWeapon(const int weaponNo, const bool currentState)
+{
+	InteractiveSurface *weapon = _weapon[weaponNo];
+
+
+	if (currentState)
+	{
+		weapon->offset(-_colors[DISABLED_WEAPON]);
+	}
+	else
+	{
+		weapon->offset(_colors[DISABLED_WEAPON]);
+	}
+
 }
 
 }

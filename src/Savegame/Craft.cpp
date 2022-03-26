@@ -1068,7 +1068,7 @@ void Craft::checkup()
 		if ((*i) == 0)
 			continue;
 		available++;
-		if ((*i)->getAmmo() >= (*i)->getRules()->getAmmoMax() || (*i)->isDisabled())
+		if ((*i)->getAmmo() >= (*i)->getRules()->getAmmoMax() || (*i)->isReloadingDisabled())
 		{
 			full++;
 		}
@@ -1190,7 +1190,7 @@ unsigned int Craft::calcRearmTime()
 	for (int idx = 0; idx < _rules->getWeapons(); idx++)
 	{
 		CraftWeapon *w1 = _weapons.at(idx);
-		if (w1 != 0 && !w1->isDisabled())
+		if (w1 != 0 && !w1->isReloadingDisabled())
 		{
 			int needed = w1->getRules()->getAmmoMax() - w1->getAmmo();
 			if (needed > 0)
@@ -1749,7 +1749,7 @@ void Craft::reuseItem(const RuleItem* item)
 	// Check if it's ammo to reload the craft
 	for (std::vector<CraftWeapon*>::iterator w = _weapons.begin(); w != _weapons.end(); ++w)
 	{
-		if ((*w) != 0 && item == (*w)->getRules()->getClipItem() && (*w)->getAmmo() < (*w)->getRules()->getAmmoMax() && !(*w)->isDisabled())
+		if ((*w) != 0 && item == (*w)->getRules()->getClipItem() && (*w)->getAmmo() < (*w)->getRules()->getAmmoMax() && !(*w)->isReloadingDisabled())
 		{
 			(*w)->setRearming(true);
 			_status = "STR_REARMING";

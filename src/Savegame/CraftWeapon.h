@@ -38,6 +38,7 @@ private:
 	int _ammo;
 	bool _rearming;
 	bool _disabled;
+	bool _reloadingDisabled;
 public:
 	/// Creates a craft weapon of the specified type.
 	CraftWeapon(RuleCraftWeapon *rules, int ammo);
@@ -61,6 +62,10 @@ public:
 	bool isDisabled() const;
 	/// Sets whether the weapon is disabled or not.
 	void setDisabled(bool disabled);
+	/// Is the weapon allowed to be reloaded?
+	void setReloadingDisabled(bool reloadDisabled);
+	/// Sets whether the weapon is allowed to be reloaded or not.
+	bool isReloadingDisabled() const;
 	/// Rearms the craft weapon.
 	int rearm(const int available, const int clipSize);
 	/// Fires the craft weapon. Used during dogfights.

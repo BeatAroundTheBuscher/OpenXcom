@@ -23,6 +23,8 @@
 namespace OpenXcom
 {
 
+enum ColorNames { DISABLED_WEAPON };
+
 class Base;
 class InteractiveSurface;
 class TextButton;
@@ -51,6 +53,8 @@ private:
 	Text *_txtWName[RuleCraft::WeaponMax], *_txtWAmmo[RuleCraft::WeaponMax];
 	InteractiveSurface *_sprite, *_weapon[RuleCraft::WeaponMax];
 	Surface *_crew, *_equip;
+	// weapon enabled/disabled
+	int _colors[1];
 	/// Formats an amount of time.
 	std::string formatTime(int time);
 public:
@@ -66,8 +70,10 @@ public:
 	void btnUfopediaClick(Action *action);
 	/// Handler for clicking the weapon button.
 	void btnWClick(Action *action);
-	/// Handler for clicking one of the weapon icons.
-	void btnWIconClick(Action *action);
+	/// Handler for left clicking one of the weapon icons to enable/disable the weapon
+	void btnWIconLeftClick(Action *action);
+	/// Handler for right clicking one of the weapon icons to set reload yes/no for the weapon
+	void btnWIconRightClick(Action *action);
 	/// Handler for clicking one of the craft icon.
 	void btnCraftIconClick(Action *action);
 	/// Handler for clicking the Crew button.
@@ -80,6 +86,8 @@ public:
 	void btnPilotsClick(Action *action);
 	/// Handler for changing the text on the Name edit.
 	void edtCraftChange(Action *action);
+	/// Recolor weapon in craft screen depending on its disabled state
+	void recolorWeapon(const int weaponNo, const bool currentState);
 };
 
 }
