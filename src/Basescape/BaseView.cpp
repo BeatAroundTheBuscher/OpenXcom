@@ -544,17 +544,36 @@ void BaseView::draw()
 		(*i)->setCraftForDrawing(0);
 		if ((*i)->getBuildTime() == 0 && (*i)->getRules()->getCrafts() > 0)
 		{
-			if (craft != _base->getCrafts()->end())
+			int myNumCraftsPerHangar = (*i)->getRules()->getCrafts();
+
+			for (int myX = 0; myX < myNumCraftsPerHangar; myX++)
 			{
-				if ((*craft)->getStatus() != "STR_OUT")
+
+				if (craft != _base->getCrafts()->end())
 				{
-					Surface *frame = _texture->getFrame((*craft)->getSkinSprite() + 33);
-					int fx = ((*i)->getX() * GRID_SIZE + ((*i)->getRules()->getSize() - 1) * GRID_SIZE / 2 + 2);
-					int fy = ((*i)->getY() * GRID_SIZE + ((*i)->getRules()->getSize() - 1) * GRID_SIZE / 2 - 4);
-					frame->blitNShade(this, fx, fy);
-					(*i)->setCraftForDrawing(*craft);
+					if ((*craft)->getStatus() != "STR_OUT")
+					{
+						Surface *frame = _texture->getFrame((*craft)->getSkinSprite() + 33);
+						int myOffsetX = 0;
+						int myOffsetY = 0;
+						if (myX % 2)
+						{
+							myOffsetX = 6;
+							myOffsetY = 6;
+						}
+						else
+						{
+							myOffsetX = -6;
+							myOffsetY = -6;
+						}
+
+						int fx = ((*i)->getX() * GRID_SIZE + ((*i)->getRules()->getSize() - 1) * GRID_SIZE / 2 + 2 + myOffsetX);
+						int fy = ((*i)->getY() * GRID_SIZE + ((*i)->getRules()->getSize() - 1) * GRID_SIZE / 2 - 4 + myOffsetY);
+						frame->blitNShade(this, fx, fy);
+						(*i)->setCraftForDrawing(*craft);
+					}
+					++craft;
 				}
-				++craft;
 			}
 		}
 
